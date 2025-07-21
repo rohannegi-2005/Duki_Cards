@@ -1,7 +1,5 @@
 # firebase_service.py
-
-import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials, db, initialize_app
 import json
 import streamlit as st
 
