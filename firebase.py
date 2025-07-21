@@ -2,11 +2,13 @@
 
 import firebase_admin
 from firebase_admin import credentials, db
+import json
 
 # Init only once
 if not firebase_admin._apps:
-    cred = credentials.Certificate("D:\\Card_game\\cards-game-47ef7-firebase-adminsdk-fbsvc-d59b5c75fc.json")
-    firebase_admin.initialize_app(cred, {
+    firebase_config = json.loads(st.secrets["firebase_config"])
+    cred = credentials.Certificate(firebase_config)
+    initialize_app(cred, {
         'databaseURL': 'https://cards-game-47ef7-default-rtdb.firebaseio.com/'
     })
 
