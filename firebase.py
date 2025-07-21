@@ -3,6 +3,7 @@
 import firebase_admin
 from firebase_admin import credentials, db
 import json
+import streamlit as st
 
 # Init only once
 if not firebase_admin._apps:
