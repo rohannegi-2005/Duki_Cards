@@ -2,6 +2,7 @@
 from firebase_admin import credentials, db, initialize_app
 import json
 import streamlit as st
+import firebase_admin
 
 # Init only once
 if not firebase_admin._apps:
