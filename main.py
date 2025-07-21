@@ -12,8 +12,9 @@ st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
 st.title("🃏 Multiplayer Card Game")
 
 # --- Auto-refresh to sync Firebase state every 5 seconds ---
+st.experimental_set_query_params(dummy=str(time.time()))
 time.sleep(5)
-st.experimental_rerun()
+
 
 # --- SESSION STATE INIT ---
 for key in ["room_code", "player_id", "player_name", "is_host", "game_started", "selected_cards"]:
