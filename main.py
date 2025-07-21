@@ -1,6 +1,7 @@
-from firebase_admin import credentials, db, initialize_app
+
 import streamlit as st
 import uuid
+import time
 from firebase import (
     create_room, join_room, get_game, update_game_field,
     update_player_hand, mark_player_pass
@@ -9,6 +10,10 @@ from game_engine import Card, RANK_ORDER
 
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
 st.title("🃏 Multiplayer Card Game")
+
+# --- Auto-refresh to sync Firebase state every 5 seconds ---
+time.sleep(5)
+st.experimental_rerun()
 
 # --- SESSION STATE INIT ---
 for key in ["room_code", "player_id", "player_name", "is_host", "game_started", "selected_cards"]:
@@ -135,8 +140,10 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
         with col2:
             if st.button("❌ Pass"):
                 mark_player_pass(st.session_state.room_code, st.session_state.player_id)
-                all_passed = all(p.get("passed") or pid == last_player for pid, p in game["players"].items())
-                if all_passed:
+
+                # FIXED: Fresh turn if all others passed
+                total_passed = sum(1 for pid, p in game["players"].items() if p.get("passed") and pid != last_player)
+                if total_passed == len(game["players"]) - 1:
                     update_game_field(st.session_state.room_code, "last_played", [])
                     update_game_field(st.session_state.room_code, "same_count", 0)
                     for pid in game["players"].keys():
