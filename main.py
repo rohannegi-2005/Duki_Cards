@@ -72,7 +72,6 @@ if st.session_state.player_name and not st.session_state.game_started:
 
     if not st.session_state.is_host:
         st.info("Waiting for host to start the game...")
-        st.rerun()
 
 # --- MAIN GAME LOOP ---
 if st.session_state.player_name and (st.session_state.game_started or get_game(st.session_state.room_code).get("current_turn")):
@@ -131,10 +130,8 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                         st.rerun()
                     else:
                         st.warning("❌ Play doesn't beat the previous.")
-              
                 else:
                     st.warning("❌ All selected cards must be of same rank.")
-                    
 
         with col2:
             if st.button("❌ Pass"):
@@ -155,4 +152,3 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
 
     else:
         st.info("⏳ Wait for your turn...")
-        
