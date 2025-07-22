@@ -78,47 +78,47 @@ class Game:
         self.turn_index = (self.turn_index + 1) % len(self.players)
 
     def play_turn(self):
-    current = self.players[self.turn_index]
-    if current.is_hand_empty():
-        return True
-
-    self.display_player_hand(current)
-    print(f"{current.name}'s turn. Last played: {self.last_played} | same_count: {self.same_count}")
-    move = input("Enter cards to play (e.g. 7♣ 7♦) or 'pass': ").strip()
-
-    if move.lower() == "pass":
-        current.passed = True
-
-        active_players = [p for p in self.players if not p.passed and p != self.last_player]
-        if not active_players:
-            print("✅ All passed except last player. Round resets.")
-            self.last_played = []
-            self.same_count = 0
-            for p in self.players:
-                p.passed = False
-            self.turn_index = self.players.index(self.last_player)
-        else:
-            self.next_turn()
-    else:
-        card_strs = move.split()
-        try:
-            selected_cards = [card for card in current.hand if f"{card.rank}{card.suit}" in card_strs]
-            if self.is_valid_play(selected_cards):
-                current.play_cards(selected_cards)
-                self.last_played = selected_cards
-                self.same_count = len(selected_cards)
-                self.last_player = current
-                print(f"{current.name} played: {selected_cards}")
+        current = self.players[self.turn_index]
+        if current.is_hand_empty():
+            return True
+    
+        self.display_player_hand(current)
+        print(f"{current.name}'s turn. Last played: {self.last_played} | same_count: {self.same_count}")
+        move = input("Enter cards to play (e.g. 7♣ 7♦) or 'pass': ").strip()
+    
+        if move.lower() == "pass":
+            current.passed = True
+    
+            active_players = [p for p in self.players if not p.passed and p != self.last_player]
+            if not active_players:
+                print("✅ All passed except last player. Round resets.")
+                self.last_played = []
+                self.same_count = 0
                 for p in self.players:
                     p.passed = False
-                if current.is_hand_empty():
-                    print(f"🎉 {current.name} wins the game!")
-                    return True
-                self.next_turn()
+                self.turn_index = self.players.index(self.last_player)
             else:
-                print("❌ Invalid move. Try again.")
-        except:
-            print("⚠️ Error reading input. Try again.")
+                self.next_turn()
+        else:
+            card_strs = move.split()
+            try:
+                selected_cards = [card for card in current.hand if f"{card.rank}{card.suit}" in card_strs]
+                if self.is_valid_play(selected_cards):
+                    current.play_cards(selected_cards)
+                    self.last_played = selected_cards
+                    self.same_count = len(selected_cards)
+                    self.last_player = current
+                    print(f"{current.name} played: {selected_cards}")
+                    for p in self.players:
+                        p.passed = False
+                    if current.is_hand_empty():
+                        print(f"🎉 {current.name} wins the game!")
+                        return True
+                    self.next_turn()
+                else:
+                    print("❌ Invalid move. Try again.")
+            except:
+                print("⚠️ Error reading input. Try again.")
 
 def start_game():
     num = int(input("Enter number of players (3–6): "))
