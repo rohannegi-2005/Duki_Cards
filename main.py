@@ -136,7 +136,11 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
         with col2:
             if st.button("❌ Pass"):
                 mark_player_pass(st.session_state.room_code, st.session_state.player_id)
-                all_passed = all(p.get("passed") or pid == last_player for pid, p in game["players"].items())
+                all_passed = all(
+                    pid == game["last_player"] or p.get("passed")
+                    for pid, p in game["players"].items()
+                    )
+
                 if all_passed:
                     update_game_field(st.session_state.room_code, "last_played", [])
                     update_game_field(st.session_state.room_code, "same_count", 0)
