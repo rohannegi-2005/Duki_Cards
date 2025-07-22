@@ -11,7 +11,7 @@ from game_engine import Card, RANK_ORDER
 
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
 st.title("🃏 Multiplayer Card Game")
-st_autorefresh(interval=3000, key="refresh")
+st_autorefresh(interval=1000, key="refresh")
 
 # --- SESSION STATE INIT ---
 for key in ["room_code", "player_id", "player_name", "is_host", "game_started", "selected_cards"]:
