@@ -155,4 +155,4 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
 
     else:
         st.info("⏳ Wait for your turn...")
-        st.rerun()
+        
