@@ -95,7 +95,8 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
 
     st.header(f"👤 You are: {st.session_state.player_name}")
     st.subheader(f"🎯 Turn: {game['players'][current_turn]['name']}")
-    st.markdown(f"🃕 Last Played: {', '.join(last_played) if last_played else 'Fresh Turn'}")
+    last_player_name = game["players"][last_player]["name"] if last_player else "None"
+    st.markdown(f"🃕 Last Played: {', '.join(last_played) if last_played else 'Fresh Turn'} by **{last_player_name}**")
 
     st.markdown("### Your Hand:")
     cols = st.columns(8)
