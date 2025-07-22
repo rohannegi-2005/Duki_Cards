@@ -78,17 +78,20 @@ if st.session_state.player_name and not st.session_state.game_started:
 # --- MAIN GAME LOOP ---
 if st.session_state.player_name and (st.session_state.game_started or get_game(st.session_state.room_code).get("current_turn")):
     game = get_game(st.session_state.room_code)
+
+    # ✅ First check if the game has a winner
+    if game.get("winner"):
+        st.balloons()
+        st.success(f"🎉 {game['winner']} WINS!")
+        st.stop()
+
+    # ✅ Safe to access player data now
     player_data = game["players"][st.session_state.player_id]
     hand = sorted(player_data["hand"], key=lambda c: RANK_ORDER.index(c[:-1]))
     current_turn = game["current_turn"]
     last_played = game.get("last_played", [])
     same_count = game.get("same_count", 0)
     last_player = game.get("last_player", "")
-
-    if game.get("winner"):
-        st.balloons()
-        st.success(f"🎉 {game['winner']} WINS!")
-        st.stop()
 
     st.header(f"👤 You are: {st.session_state.player_name}")
     st.subheader(f"🎯 Turn: {game['players'][current_turn]['name']}")
