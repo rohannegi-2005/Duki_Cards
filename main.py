@@ -54,7 +54,7 @@ if st.session_state.player_name and not st.session_state.game_started:
 
     if st.session_state.is_host and st.button("🚀 Start Game"):
         import random
-        from game_engine import SUITS
+        SUITS = ['♣', '♦', '♥', '♠']
         players = list(game["players"].keys())
         deck = [f"{rank}{suit}" for rank in RANK_ORDER for suit in SUITS]
         random.shuffle(deck)
