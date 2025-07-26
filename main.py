@@ -56,7 +56,12 @@ if st.session_state.player_name and not st.session_state.game_started:
         import random
         SUITS = ['♣', '♦', '♥', '♠']
         players = list(game["players"].keys())
-        deck = [f"{rank}{suit}" for rank in RANK_ORDER for suit in SUITS]
+        deck = []
+        for rank in RANK_ORDER:
+            for suit in SUITS:
+                card = f"{rank}{suit}"
+                deck.append(card)
+
         random.shuffle(deck)
         hands = {pid: [] for pid in players}
         for i, card in enumerate(deck):
