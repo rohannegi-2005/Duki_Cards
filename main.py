@@ -92,7 +92,7 @@ if st.session_state.player_name and not st.session_state.game_started:
         else:
             update_game_field(st.session_state.room_code, "current_turn", players[0])  # fallback
 
-        update_game_field(st.session_state.room_code, "current_turn", players[0])
+        # update_game_field(st.session_state.room_code, "current_turn", players[0])
         update_game_field(st.session_state.room_code, "last_played", [])
         update_game_field(st.session_state.room_code, "same_count", 0)
         update_game_field(st.session_state.room_code, "last_player", "")
