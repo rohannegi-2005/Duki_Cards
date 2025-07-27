@@ -33,6 +33,4 @@ def mark_player_pass(room_code, player_id, status=True):
 def delete_room(room_code):
     db.reference(f"games/{room_code}").delete()
 
-def update_multiple_fields(room_code, data: dict):
-    db.reference(f"games/{room_code}").update(data)
 
