@@ -6,7 +6,7 @@ from firebase import (
     create_room, join_room, get_game, update_game_field,
     update_player_hand, mark_player_pass
 )
-from game_engine import Card, RANK_ORDER
+from game_engine import Card
 
 
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
