@@ -76,9 +76,10 @@ if st.session_state.player_name and not st.session_state.game_started:
             i += 1
             if i == len(players):         
                 i = 0                       
-
+        # All players Hand saving to the database...
         for pid, hand in hands.items():
             update_player_hand(st.session_state.room_code, pid, hand)
+            
         update_game_field(st.session_state.room_code, "turn_order", players)
         update_game_field(st.session_state.room_code, "current_turn", players[0])
         update_game_field(st.session_state.room_code, "last_played", [])
