@@ -160,11 +160,9 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                     if not last_played or (len(st.session_state.selected_cards) == same_count and RANK_ORDER.index(ranks[0]) >= RANK_ORDER.index(last_played[0][:-1])):
                         new_hand = [c for c in hand if c not in st.session_state.selected_cards]
                         update_player_hand(st.session_state.room_code, st.session_state.player_id, new_hand)
-                        update_multiple_fields(room_code, {
-                            "last_played": st.session_state.selected_cards,
-                            "same_count": len(st.session_state.selected_cards),
-                            "last_player": st.session_state.player_id
-                        })
+                        update_game_field(st.session_state.room_code, "last_played", st.session_state.selected_cards)
+                        update_game_field(st.session_state.room_code, "same_count", len(st.session_state.selected_cards))
+                        update_game_field(st.session_state.room_code, "last_player", st.session_state.player_id)
 
                         for pid in game["players"].keys():
                             mark_player_pass(st.session_state.room_code, pid, False)
