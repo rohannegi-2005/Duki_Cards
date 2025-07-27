@@ -6,7 +6,8 @@ from firebase import (
     create_room, join_room, get_game, update_game_field,
     update_player_hand, mark_player_pass
 )
-from game_engine import Card
+# from game_engine import Card
+import time
 
 RANK_ORDER = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
@@ -161,7 +162,9 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                         new_hand = [c for c in hand if c not in st.session_state.selected_cards]
                         update_player_hand(st.session_state.room_code, st.session_state.player_id, new_hand)
                         update_game_field(st.session_state.room_code, "last_played", st.session_state.selected_cards)
+                        time.sleep(0.1)
                         update_game_field(st.session_state.room_code, "same_count", len(st.session_state.selected_cards))
+                        time.sleep(0.1)
                         update_game_field(st.session_state.room_code, "last_player", st.session_state.player_id)
 
                         for pid in game["players"].keys():
