@@ -8,7 +8,7 @@ from firebase import (
 )
 from game_engine import Card
 
-
+RANK_ORDER = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
 st.title("🃏 Multiplayer Card Game")
 st_autorefresh(interval=5000, key="refresh")
@@ -56,7 +56,6 @@ if st.session_state.player_name and not st.session_state.game_started:
         # Creating a shuffled deck
         import random
         SUITS = ['♣', '♦', '♥', '♠']
-        RANK_ORDER = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
         players = list(game["players"].keys())
         deck = []
         for rank in RANK_ORDER:
