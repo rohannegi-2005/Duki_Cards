@@ -114,30 +114,39 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
         st.success(f"🎉 {game['winner']} WINS!")
         st.stop()
 
-    # ✅ Safe to access player data now
+    # 🃏 GET CURRENT PLAYER DATA
     player_data = game["players"][st.session_state.player_id]
     hand = sorted(player_data["hand"], key=lambda c: RANK_ORDER.index(c[:-1]))
+    valid_selected = []
     current_turn = game["current_turn"]
     last_played = game.get("last_played", [])
     same_count = game.get("same_count", 0)
     last_player = game.get("last_player", "")
 
+    # 👤 Display Player Info and Last Played
     st.header(f"👤 You are: {st.session_state.player_name}")
     st.subheader(f"🎯 Turn: {game['players'][current_turn]['name']}")
     last_player_name = game["players"][last_player]["name"] if last_player else "None"
     st.subheader(f"🃕 Last Played: {', '.join(last_played) if last_played else 'Fresh Turn'} by **{last_player_name}**")
 
+    # 🂠 Display Your Hand with Buttons    
     st.markdown("### Your Hand:")
     cols = st.columns(8)
-    for idx, card in enumerate(hand):
+    i = 0
+    for card in hand:
         is_selected = card in st.session_state.selected_cards
         label = f"🟢 {card}" if is_selected else card
-        if cols[idx % 8].button(label, key=f"card_{idx}"):
+        if cols[i % 8].button(label, key=f"card_{i}"):
             if is_selected:
                 st.session_state.selected_cards.remove(card)
             else:
                 st.session_state.selected_cards.append(card)
+        i += 1
 
+    for c in st.session_state.selected_cards:
+        if c in hand:
+            valid_selected.append(c)
+    st.session_state.selected_cards = valid_selected
     st.markdown(f"✅ Selected: {', '.join(st.session_state.selected_cards)}")
 
     if current_turn == st.session_state.player_id:
