@@ -145,10 +145,6 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                 st.session_state.selected_cards.append(card)
         i += 1
 
-    for c in st.session_state.selected_cards:
-        if c in hand:
-            valid_selected.append(c)
-    st.session_state.selected_cards = valid_selected
     st.markdown(f"✅ Selected: {', '.join(st.session_state.selected_cards)}")
 
     if current_turn == st.session_state.player_id:
