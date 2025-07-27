@@ -56,6 +56,7 @@ if st.session_state.player_name and not st.session_state.game_started:
         # Creating a shuffled deck
         import random
         SUITS = ['♣', '♦', '♥', '♠']
+        RANK_ORDER = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
         players = list(game["players"].keys())
         deck = []
         for rank in RANK_ORDER:
