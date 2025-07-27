@@ -4,7 +4,7 @@ import streamlit as st
 import uuid
 from firebase import (
     create_room, join_room, get_game, update_game_field,
-    update_player_hand, mark_player_pass
+    update_player_hand, mark_player_pass,update_multiple_fields
 )
 from game_engine import Card
 
