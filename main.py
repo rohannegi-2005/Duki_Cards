@@ -53,6 +53,7 @@ if st.session_state.player_name and not st.session_state.game_started:
             st.markdown(f"- {p['name']}")
 
     if st.session_state.is_host and st.button("🚀 Start Game"):
+        # Creating a shuffled deck
         import random
         SUITS = ['♣', '♦', '♥', '♠']
         players = list(game["players"].keys())
@@ -61,11 +62,20 @@ if st.session_state.player_name and not st.session_state.game_started:
             for suit in SUITS:
                 card = f"{rank}{suit}"
                 deck.append(card)
-
         random.shuffle(deck)
-        hands = {pid: [] for pid in players}
-        for i, card in enumerate(deck):
-            hands[players[i % len(players)]].append(card)
+
+        # Card distribution
+        hands = {}
+        for pid in players:
+            hands[pid] = [] 
+        i = 0
+        for card in deck:
+            player_id = players[i]         
+            hands[player_id].append(card)   
+            i += 1
+            if i == len(players):         
+                i = 0                       
+
         for pid, hand in hands.items():
             update_player_hand(st.session_state.room_code, pid, hand)
         update_game_field(st.session_state.room_code, "turn_order", players)
