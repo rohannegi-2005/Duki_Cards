@@ -68,13 +68,15 @@ if st.session_state.player_name and not st.session_state.game_started:
         hands = {}
         for pid in players:
             hands[pid] = [] 
+            
         i = 0
         for card in deck:
             player_id = players[i]         
             hands[player_id].append(card)   
             i += 1
             if i == len(players):         
-                i = 0                       
+                i = 0 
+                
         # All players Hand saving to the database...
         for pid, hand in hands.items():
             update_player_hand(st.session_state.room_code, pid, hand)
@@ -91,8 +93,7 @@ if st.session_state.player_name and not st.session_state.game_started:
             update_game_field(st.session_state.room_code, "current_turn", first_player)
         else:
             update_game_field(st.session_state.room_code, "current_turn", players[0])  # fallback
-
-        
+  
         update_game_field(st.session_state.room_code, "last_played", [])
         update_game_field(st.session_state.room_code, "same_count", 0)
         update_game_field(st.session_state.room_code, "last_player", "")
