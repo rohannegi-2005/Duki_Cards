@@ -149,8 +149,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
 
     if current_turn == st.session_state.player_id:
         col1, col2 = st.columns(2)
-        st.session_state.selected_cards = []
-
+       
         with col1:
             if st.button("✅ Play"):
                 ranks = [c[:-1] for c in st.session_state.selected_cards]
@@ -174,6 +173,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                             update_game_field(st.session_state.room_code, "current_turn", next_pid)
                         st.session_state.selected_cards = []
                         st.rerun()
+                    st.session_state.selected_cards = []
                     else:
                         st.warning("❌ Play doesn't beat the previous.")
                 else:
