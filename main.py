@@ -149,6 +149,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
 
     if current_turn == st.session_state.player_id:
         col1, col2 = st.columns(2)
+        st.session_state.selected_cards = []
 
         with col1:
             if st.button("✅ Play"):
