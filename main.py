@@ -173,9 +173,10 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                             update_game_field(st.session_state.room_code, "current_turn", next_pid)
                         st.session_state.selected_cards = []
                         st.rerun()
-                    st.session_state.selected_cards = []
+                    
                     else:
                         st.warning("❌ Play doesn't beat the previous.")
+                    st.session_state.selected_cards = []
                 else:
                     st.warning("❌ All selected cards must be of same rank.")
 
