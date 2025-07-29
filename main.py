@@ -139,8 +139,8 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
     # 👤 Display Player Info and Last Played
     st.header(f"👤 You are: {st.session_state.player_name}")
     st.subheader(f"🎯 Turn: {game['players'][current_turn]['name']}")
-    # remaining = max(0, 30 - (int(time.time()) - last_turn_time))
-    # st.markdown(f"⏳ Time Left for Turn: **{remaining} sec**")
+    remaining = max(0, 30 - (int(time.time()) - last_turn_time))
+    st.markdown(f"⏳ Time Left for Turn: **{remaining} sec**")
 
     last_player_name = game["players"][last_player]["name"] if last_player else "None"
     st.subheader(f"🃕 Last Played: {', '.join(last_played) if last_played else 'Fresh Turn'} by {last_player_name}")
@@ -174,9 +174,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                         new_hand = [c for c in hand if c not in st.session_state.selected_cards]
                         update_player_hand(st.session_state.room_code, st.session_state.player_id, new_hand)
                         update_game_field(st.session_state.room_code, "last_played", st.session_state.selected_cards)
-                        time.sleep(0.1)
                         update_game_field(st.session_state.room_code, "same_count", len(st.session_state.selected_cards))
-                        time.sleep(0.1)
                         update_game_field(st.session_state.room_code, "last_player", st.session_state.player_id)
 
                         for pid in game["players"].keys():
