@@ -6,13 +6,13 @@ from firebase import (
     create_room, join_room, get_game, update_game_field,
     update_player_hand, mark_player_pass
 )
-# from game_engine import Card
+
 import time
 
 RANK_ORDER = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
 st.title("🃏 Multiplayer Card Game")
-st_autorefresh(interval=5000, key="refresh")
+st_autorefresh(interval=4500, key="refresh")
 
 # --- SESSION STATE INIT ---
 for key in ["room_code", "player_id", "player_name", "is_host", "game_started", "selected_cards"]:
@@ -146,10 +146,12 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
         i += 1
 
     st.markdown(f"✅ Selected: {', '.join(st.session_state.selected_cards)}")
-
+    
+    # Its your Turn
     if current_turn == st.session_state.player_id:
         col1, col2 = st.columns(2)
-       
+        
+       # If player click on Play
         with col1:
             if st.button("✅ Play"):
                 ranks = [c[:-1] for c in st.session_state.selected_cards]
@@ -180,6 +182,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                 else:
                     st.warning("❌ All selected cards must be of same rank.")
                     
+         # Getting fresh turn if all players pass except the last one...
         all_passed = all(
                     pid == game["last_player"] or p.get("passed")
                     for pid, p in game["players"].items()
@@ -190,6 +193,8 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                     for pid in game["players"].keys():
                         mark_player_pass(st.session_state.room_code, pid, False)
                     update_game_field(st.session_state.room_code, "current_turn", last_player)
+
+        # If player click on Pass...
         with col2:
             if st.button("❌ Pass"):
                 mark_player_pass(st.session_state.room_code, st.session_state.player_id)      
