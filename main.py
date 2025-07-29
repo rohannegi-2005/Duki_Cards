@@ -6,8 +6,8 @@ from firebase import (
     create_room, join_room, get_game, update_game_field,
     update_player_hand, mark_player_pass
 )
-
 import time
+
 
 RANK_ORDER = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
 st.set_page_config(page_title="Multiplayer Card Game", layout="wide")
@@ -88,17 +88,17 @@ if st.session_state.player_name and not st.session_state.game_started:
             if i == len(players):         
                 i = 0 
 
-        # All players Hand saving to the database...
+        # All players initial hand saving to the database...
         for pid, hand in hands.items():
             update_player_hand(st.session_state.room_code, pid, hand)
-
         update_game_field(st.session_state.room_code, "turn_order", players)
+
+        # 3♣ will start the game logic
         first_player = None
         for pid, hand in hands.items():
             if '3♣' in hand:
                 first_player = pid
                 break
-
         if first_player:
             update_game_field(st.session_state.room_code, "current_turn", first_player)
         else:
@@ -115,16 +115,19 @@ if st.session_state.player_name and not st.session_state.game_started:
     if not st.session_state.is_host:
         st.info("Waiting for host to start the game...")
 
+
 # --- MAIN GAME LOOP ---
 if st.session_state.player_name and (st.session_state.game_started or get_game(st.session_state.room_code).get("current_turn")):
     game = get_game(st.session_state.room_code)
 
+    # Winner 
     if game.get("winner"):
         st.balloons()
         st.image("https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif")
         st.success(f"🎉 {game['winner']} WINS!")
         st.stop()
 
+    # Fetching data from Database
     player_data = game["players"][st.session_state.player_id]
     hand = sorted(player_data["hand"], key=lambda c: RANK_ORDER.index(c[:-1]))
     current_turn = game["current_turn"]
@@ -133,6 +136,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
     last_player = game.get("last_player", "")
     last_turn_time = game.get("last_turn_time", int(time.time()))
 
+    # Autopass if a player did not play within 30 seconds....
     if st.session_state.is_host:
         now = int(time.time())
         if now - last_turn_time > 30:
@@ -145,14 +149,21 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
 
     st.header(f"👤 You are: {st.session_state.player_name}")
     st.subheader(f"🎯 Turn: {game['players'][current_turn]['name']}")
+    
+    # Timmer UI
     remaining = max(0, 30 - (int(time.time()) - last_turn_time))
     st.markdown(f"⏳ Time Left for Turn: **{remaining} sec**")
+    
     last_player_name = game["players"][last_player]["name"] if last_player else "None"
     st.subheader(f"🃕 Last Played: {', '.join(last_played) if last_played else 'Fresh Turn'} by {last_player_name}")
 
     st.markdown("### Your Hand:")
+    
     cols = st.columns(8)
-    for i, card in enumerate(hand):
+
+    # Selected Cards shown Logic
+    i = 0
+    for card in hand:
         is_selected = card in st.session_state.selected_cards
         label = f"🟢 {card}" if is_selected else card
         if cols[i % 8].button(label, key=f"card_{i}"):
@@ -160,12 +171,14 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                 st.session_state.selected_cards.remove(card)
             else:
                 st.session_state.selected_cards.append(card)
-
+        i += 1
+        
     st.markdown(f"✅ Selected: {', '.join(st.session_state.selected_cards)}")
 
     if current_turn == st.session_state.player_id:
         col1, col2 = st.columns(2)
         with col1:
+            # If player click on play Button.
             if st.button("✅ Play"):
                 ranks = [c[:-1] for c in st.session_state.selected_cards]
                 if len(set(ranks)) == 1:
@@ -192,6 +205,8 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                     st.session_state.selected_cards = []
                 else:
                     st.warning("❌ All selected cards must be of same rank.")
+
+        # If all players pass except the last one....He/She will get the fresh turn.
         all_passed = all(
             pid == game["last_player"] or p.get("passed")
             for pid, p in game["players"].items()
@@ -204,6 +219,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
             update_game_field(st.session_state.room_code, "current_turn", last_player)
 
         with col2:
+            # If player click on the pass button.
             if st.button("❌ Pass"):
                 mark_player_pass(st.session_state.room_code, st.session_state.player_id)
                 idx = game["turn_order"].index(current_turn)
