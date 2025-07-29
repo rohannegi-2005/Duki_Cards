@@ -47,6 +47,16 @@ if st.session_state.room_code and not st.session_state.player_name:
 # --- WAITING ROOM ---
 if st.session_state.player_name and not st.session_state.game_started:
     game = get_game(st.session_state.room_code) or {}
+    last_turn_time = game.get("last_turn_time", int(time.time()))
+    now = int(time.time())
+    if st.session_state.is_host and now - last_turn_time > 30:
+        current_turn = game["current_turn"]
+        mark_player_pass(st.session_state.room_code, current_turn)
+        idx = game["turn_order"].index(current_turn)
+        next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
+        update_game_field(st.session_state.room_code, "current_turn", next_pid)
+        update_game_field(st.session_state.room_code, "last_turn_time", now)
+        st.rerun()
     st.subheader(f"👥 Waiting in Room: {st.session_state.room_code}")
     st.write("Players Joined:")
     if "players" in game:
@@ -173,6 +183,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                             idx = game["turn_order"].index(current_turn)
                             next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
                             update_game_field(st.session_state.room_code, "current_turn", next_pid)
+                            update_game_field(st.session_state.room_code, "last_turn_time", int(time.time()))
                         st.session_state.selected_cards = []
                         st.rerun()
                     
@@ -201,6 +212,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                 idx = game["turn_order"].index(current_turn)
                 next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
                 update_game_field(st.session_state.room_code, "current_turn", next_pid)
+                update_game_field(st.session_state.room_code, "last_turn_time", int(time.time()))
                 st.session_state.selected_cards = []
                 st.rerun()
 
