@@ -204,19 +204,5 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                 st.session_state.selected_cards = []
                 st.rerun()
 
-        st.session_state.start = time.time()
-        st.session_state.auto_pass = False
-        while st.session_state.auto_pass != True:
-            st.session_state.time_passed = (time.time() - st.session_state.start)
-            if st.session_state.time_passed > 30:
-                st.session_state.auto_pass = True
-        if st.session_state.auto_pass == True:
-            mark_player_pass(st.session_state.room_code, st.session_state.player_id)      
-            idx = game["turn_order"].index(current_turn)
-            next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
-            update_game_field(st.session_state.room_code, "current_turn", next_pid)
-            st.session_state.selected_cards = []
-            st.rerun()
-
     else:
         st.info("⏳ Wait for your turn...")
