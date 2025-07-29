@@ -184,21 +184,18 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                     pid == game["last_player"] or p.get("passed")
                     for pid, p in game["players"].items()
                     )
-        with col2:
-            if st.button("❌ Pass"):
-                mark_player_pass(st.session_state.room_code, st.session_state.player_id)
-                
-
-                if all_passed:
+        if all_passed:
                     update_game_field(st.session_state.room_code, "last_played", [])
                     update_game_field(st.session_state.room_code, "same_count", 0)
                     for pid in game["players"].keys():
                         mark_player_pass(st.session_state.room_code, pid, False)
                     update_game_field(st.session_state.room_code, "current_turn", last_player)
-                else:
-                    idx = game["turn_order"].index(current_turn)
-                    next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
-                    update_game_field(st.session_state.room_code, "current_turn", next_pid)
+        with col2:
+            if st.button("❌ Pass"):
+                mark_player_pass(st.session_state.room_code, st.session_state.player_id)      
+                idx = game["turn_order"].index(current_turn)
+                next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
+                update_game_field(st.session_state.room_code, "current_turn", next_pid)
                 st.session_state.selected_cards = []
                 st.rerun()
 
