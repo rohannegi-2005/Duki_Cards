@@ -133,7 +133,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
     current_turn = game["current_turn"]
     last_played = game.get("last_played", [])
     same_count = game.get("same_count", 0)
-    last_turn_time = game.get("last_turn_time", int(time.time()))
+    # last_turn_time = game.get("last_turn_time", int(time.time()))
     last_player = game.get("last_player", "")
 
     # 👤 Display Player Info and Last Played
