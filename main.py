@@ -195,6 +195,19 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                     update_game_field(st.session_state.room_code, "current_turn", last_player)
 
         # If player click on Pass...
+        start = time.time()
+        auto_pass = False
+        while auto_pass != True:
+            time_passed = (time.time() - start)
+            if time_passed > 30:
+                auto_pass = True
+        if auto_pass = True:
+            mark_player_pass(st.session_state.room_code, st.session_state.player_id)      
+            idx = game["turn_order"].index(current_turn)
+            next_pid = game["turn_order"][(idx + 1) % len(game["turn_order"])]
+            update_game_field(st.session_state.room_code, "current_turn", next_pid)
+            st.session_state.selected_cards = []
+            st.rerun()
         with col2:
             if st.button("❌ Pass"):
                 mark_player_pass(st.session_state.room_code, st.session_state.player_id)      
