@@ -205,6 +205,7 @@ if st.session_state.player_name and (st.session_state.game_started or get_game(s
                     st.session_state.selected_cards = []
                 else:
                     st.warning("❌ All selected cards must be of same rank.")
+                st.session_state.selected_cards = []
 
         # If all players pass except the last one....He/She will get the fresh turn.
         all_passed = all(
