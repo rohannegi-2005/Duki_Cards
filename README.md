@@ -2,7 +2,7 @@
 
 This project brings to life a **classic card game** I used to play with my friends during holidays.  
 While we had a great time playing it in person, distance made it tough once everyone returned to their colleges and jobs.  
-So, I decided to take the game **online** — now we can play it from **anywhere, anytime!** 🌍
+So, I decided to take the game **online** — now we can play it from **anywhere, anytime!** 
 
 ---
 
